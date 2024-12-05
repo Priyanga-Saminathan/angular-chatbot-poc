@@ -1,0 +1,73 @@
+<div class="body">
+<div class="chat" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+<div *ngIf="connection" class="welcome-message-with-logo">
+    
+    <img class="welcome-logo" src="assets/DCgovLogo.png">
+<div class="welcome-message-part">
+<div class="">
+    <p id="dc-english-text">
+    Welcome to our DC Health Virtual Assistant. I can speak both English and Spanish. Which language would you prefer?
+    <br>
+    <br>
+    Bienvenido a nuestro asistente virtual de DC Health. Puedo hablar inglés y español. ¿Qué idioma prefiere?</p>
+</div>
+<div id="english-spanish-button" class="english-spanish-button btn-row">
+    <div>
+        <button id="English-button" class="btn" [disabled]="flag" (click)="response($event)" [ngClass]="english===true?'grey':'blue'">English</button>
+        <span class="message-sent" id="english-message-sent">English</span>
+    </div>
+    <div>
+        <button id="Spanish-button" class="btn" [disabled]="flag" (click)="response($event)">Español</button>
+    </div>
+</div>
+<div>
+    <span class="timestamp">{{dateandtime| date:'dd MMM - hh:mm a'}}</span>
+</div>
+
+</div>
+</div>
+    
+<ng-container *ngFor="let message of websocketChatArray; let i = index">
+    <div class="user-message-logo">
+        <img *ngIf="message.bool" class="user-logo" src="assets/logo_round.png">
+        <p *ngIf="message.bool" class="user-message-display">{{message.message}}</p>
+        <div>
+            <span class="timestamp" style="display: block; float: right; clear: both;margin-right: 10px;">{{message.Time | date:'dd MMM - hh:mm a'}}</span>
+        </div>
+        
+        <div class="websocket-response">
+            <img *ngIf="message.bool" class="welcome-logo" src="assets/DCgovLogo.png">
+            <!-- <span *ngIf="star">Typing</span> -->
+            <div style="width:50%;">
+                <table *ngIf="star&&connType==='open'&&count===i+1" style="clear:both">
+                    <tr>
+                        <td><img class="star" src="assets/star_red.png"></td>
+                        <td><img class="star1" src="assets/star_red.png"></td>
+                        <td><img class="star2" src="assets/star_red.png"></td>
+                    </tr>
+                </table>
+                <!-- <img *ngIf="star" class="star" src="assets/star.png">
+                <img *ngIf="star" class="star" src="assets/star.png">
+                <img *ngIf="star" class="star" src="assets/star.png"> -->
+                <span *ngIf="star&&connType==='open'&&count===i+1" style="font-size:13px; clear:both;margin-top:10px;">Typing...</span>
+                <span class="response-message" id="messageChunk-{{i+1}}"></span>
+                <!-- <link href="..." id="messageChunkRef-{{i+1}}"> -->
+                <!-- <span *ngIf="connType==='close'&&send&&count==i+1" class="close-message" style="font-size: 14px;float: left;">Sorry, Something went wrong</span> -->
+                <div>
+                    <span class="timestamp"  style="display: block; float: left; clear: both;margin-top: 2px;">{{message.Time | date:'dd MMM - hh:mm a'}}</span>
+                </div>
+            </div>
+        </div>
+        
+        
+    </div>
+</ng-container>
+        
+</div>
+<div class="message-container" *ngIf="inputbool">
+        <input class="input-textbox " name="input-box"   #inputtext type="text" placeholder="Type your questions here" (input)="inputMsg(inputtext.value)" [(ngModel)]="input_text"/>
+        <img class="icon" *ngIf="changeEvent && eochunk" src="assets/send_teal.png" (click)="sendmessage()">
+        <img class="icon" *ngIf="!changeEvent || !eochunk" src="assets/send_gray.png">
+        <img class="home-icon" src="assets/fa_home_enabled.png" href="#" (click)="reloadPage()">
+</div>
+</div>
